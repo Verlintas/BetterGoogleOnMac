@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,6 +37,6 @@ jobs:
           TAG="${GITHUB_REF_NAME}"
           NOTES="$(sed "s/{{VERSION}}/${TAG}/g" RELEASE_NOTES.md)"
           gh release create "$TAG" \
-            --title "BetterGoogleOnMac ${TAG}" \
+            --title "GoogleOnYourMac ${TAG}" \
             --notes "$NOTES" \
-            build/zip/apps/*.zip build/zip/BetterGoogleOnMac-*.zip
+            build/zip/apps/*.zip build/zip/GoogleOnYourMac-*.zip

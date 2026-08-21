@@ -26,12 +26,16 @@ build_arch() {
     local zip_name="$EL_DIR/electron.zip.$arch"
     local template="$EL_DIR/template.$arch.app"
 
-    # ---- 1. 下载 Electron（未缓存时）----
+    # ---- 1. 下载 Electron（未缓存时，npmmirror 失败则回退官方源）----
     if [ ! -f "$zip_name" ]; then
         echo "下载 Electron v$EL_VERSION ($arch) [npmmirror]..."
         mkdir -p "$EL_DIR"
-        curl -fsSL --max-time 600 -o "$zip_name" \
-            "https://npmmirror.com/mirrors/electron/$EL_VERSION/electron-v$EL_VERSION-darwin-$arch.zip"
+        if ! curl -fsSL --max-time 600 -o "$zip_name" \
+            "https://npmmirror.com/mirrors/electron/$EL_VERSION/electron-v$EL_VERSION-darwin-$arch.zip"; then
+            echo "npmmirror 失败，回退 github.com..."
+            curl -fsSL --max-time 1200 -o "$zip_name" \
+                "https://github.com/electron/electron/releases/download/v$EL_VERSION/electron-v$EL_VERSION-darwin-$arch.zip"
+        fi
     fi
 
     # ---- 2. 制作剥离模板（一次性）----

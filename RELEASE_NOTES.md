@@ -1,4 +1,4 @@
-# BetterGoogleOnMac {{VERSION}}
+# GoogleOnYourMac {{VERSION}}
 
 > 由 GitHub Actions 自动构建发布 / Auto-built and released by GitHub Actions
 

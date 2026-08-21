@@ -1,4 +1,4 @@
-# BetterGoogleOnMac
+# GoogleOnYourMac
 
 [![Release](https://img.shields.io/badge/release-auto--build-blue)](https://github.com/Verlintas/GoogleOnYourMac/releases/latest)
 
@@ -23,10 +23,10 @@ This project generates a standalone macOS app for each Google service — one cl
 
 | 版本 / Version | 说明 / Description | 下载 / Download |
 |---|---|---|
-| **Chromium 版合集 (arm64)** | 全部 10 个应用，各自内置 Chromium 内核（总包约 1GB）/ All 10 apps, each with its own Chromium engine (~1GB total) | [BetterGoogleOnMac-Chromium-v2.1.0.zip](https://github.com/Verlintas/GoogleOnYourMac/releases/latest/download/BetterGoogleOnMac-Chromium-v2.1.0.zip) |
-| **Chromium 版合集 (x64)** | 同上，Intel Mac 使用 / Same, for Intel Macs | [BetterGoogleOnMac-Chromium-x64-v2.1.0.zip](https://github.com/Verlintas/GoogleOnYourMac/releases/latest/download/BetterGoogleOnMac-Chromium-x64-v2.1.0.zip) |
-| **Chrome 版合集** | 全部 10 个应用，Chrome 独立窗口；需已安装 Google Chrome / requires Google Chrome | [BetterGoogleOnMac-Chrome-v2.1.0.zip](https://github.com/Verlintas/GoogleOnYourMac/releases/latest/download/BetterGoogleOnMac-Chrome-v2.1.0.zip) |
-| **Safari 版合集** | 全部 10 个应用，Swift + WKWebView，通用二进制 (arm64 + x86_64) / universal binary | [BetterGoogleOnMac-Safari-v2.1.0.zip](https://github.com/Verlintas/GoogleOnYourMac/releases/latest/download/BetterGoogleOnMac-Safari-v2.1.0.zip) |
+| **Chromium 版合集 (arm64)** | 全部 10 个应用，各自内置 Chromium 内核（总包约 1GB）/ All 10 apps, each with its own Chromium engine (~1GB total) | [GoogleOnYourMac-Chromium-v2.1.0.zip](https://github.com/Verlintas/GoogleOnYourMac/releases/latest/download/GoogleOnYourMac-Chromium-v2.1.0.zip) |
+| **Chromium 版合集 (x64)** | 同上，Intel Mac 使用 / Same, for Intel Macs | [GoogleOnYourMac-Chromium-x64-v2.1.0.zip](https://github.com/Verlintas/GoogleOnYourMac/releases/latest/download/GoogleOnYourMac-Chromium-x64-v2.1.0.zip) |
+| **Chrome 版合集** | 全部 10 个应用，Chrome 独立窗口；需已安装 Google Chrome / requires Google Chrome | [GoogleOnYourMac-Chrome-v2.1.0.zip](https://github.com/Verlintas/GoogleOnYourMac/releases/latest/download/GoogleOnYourMac-Chrome-v2.1.0.zip) |
+| **Safari 版合集** | 全部 10 个应用，Swift + WKWebView，通用二进制 (arm64 + x86_64) / universal binary | [GoogleOnYourMac-Safari-v2.1.0.zip](https://github.com/Verlintas/GoogleOnYourMac/releases/latest/download/GoogleOnYourMac-Safari-v2.1.0.zip) |
 
 ### 单个服务下载 / Individual apps
 
@@ -65,21 +65,27 @@ Chromium features: camera/mic (Meet calls), download notifications, window memor
 
 - 双击即可打开对应服务，无需输入网址。
   Double-click to open the service — no URL typing needed.
-- Chrome 版：独立窗口，无地址栏、无标签页；登录信息与 Chrome 浏览器共享。
-  Chrome version: standalone window without address bar or tabs; shares login with your Chrome browser.
-- 原生版快捷键 / Native version shortcuts:
+- **Chromium 版 / Safari 版**：独立窗口，无地址栏，快捷键：
+  Standalone window without an address bar. Shortcuts:
   - `Cmd + [` 后退 / Back
   - `Cmd + ]` 前进 / Forward
   - `Cmd + R` 刷新 / Reload
   - `Cmd + Shift + H` 回到首页 / Home
-  - 工具栏也有后退/前进/刷新/首页按钮 / Toolbar also has Back/Forward/Reload/Home buttons
+  - `Cmd + N` 新窗口 / New window (Chromium 版)
+- **Chromium 版额外功能 / Chromium extras**:
+  - 摄像头/麦克风（Google Meet 视频通话）/ Camera & mic for Meet calls
+  - 下载完成通知 / Download-finished notifications
+  - 窗口位置与大小记忆 / Window position & size memory
+  - 深链接：`bettergoogle-<service>://` 可被浏览器等外部调用 / Deep links: `bettergoogle-<service>://`
+- **Chrome 版**：独立窗口，无地址栏、无标签页；登录信息与 Chrome 浏览器共享。
+  Chrome version: standalone window without address bar or tabs; shares login with your Chrome browser.
 
 ## 从源码构建 / Build from source
 
 ```bash
 git clone https://github.com/Verlintas/GoogleOnYourMac.git
-cd BetterGoogleOnMac
-bash scripts/create_all.sh            # 一键构建并安装到 ~/Applications/BetterGoogleOnMac
+cd GoogleOnYourMac
+bash scripts/create_all.sh            # 一键构建并安装到 ~/Applications/GoogleOnYourMac
 # 构建产物也会出现在 build/ 目录 / Build artifacts also land in build/
 bash scripts/package_release.sh       # 生成 Release 用 zip / Produce release zips
 
@@ -89,9 +95,9 @@ git tag v2.1.0 && git push origin v2.1.0
 ```
 
 要求 / Requirements:
-- Chromium 版：Apple Silicon (arm64) / Chromium edition: Apple Silicon (arm64)
+- Chromium 版：arm64（Apple Silicon）/ x64（Intel），macOS 11+ / Chromium edition: macOS 11+
 - Safari 版：macOS 12+，Intel 与 Apple Silicon 均支持 / Safari edition: macOS 12+, Intel & Apple Silicon
-- 构建 Chromium 版需要 Node.js 与网络（Electron 从 npmmirror 镜像下载）/ Building Chromium edition needs Node.js and network
+- 构建 Chromium 版需要 Node.js 与网络（Electron 自动从 npmmirror/官方源下载）/ Building Chromium edition needs Node.js and network (Electron is downloaded automatically)
 
 ## 常见问题 / FAQ
 

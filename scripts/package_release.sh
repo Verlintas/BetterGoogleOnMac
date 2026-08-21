@@ -34,15 +34,20 @@ for entry in "${SERVICES[@]}"; do
     done
 done
 
-CHROME_ZIP="$ZIP_DIR/BetterGoogleOnMac-Chrome-v$VERSION.zip"
-NATIVE_ZIP="$ZIP_DIR/BetterGoogleOnMac-Safari-v$VERSION.zip"
-CHROMIUM_ZIP="$ZIP_DIR/BetterGoogleOnMac-Chromium-v$VERSION.zip"
+CHROME_ZIP="$ZIP_DIR/GoogleOnYourMac-Chrome-v$VERSION.zip"
+NATIVE_ZIP="$ZIP_DIR/GoogleOnYourMac-Safari-v$VERSION.zip"
+CHROMIUM_ZIP="$ZIP_DIR/GoogleOnYourMac-Chromium-v$VERSION.zip"
+CHROMIUM_X64_ZIP="$ZIP_DIR/GoogleOnYourMac-Chromium-x64-v$VERSION.zip"
 ditto -c -k --sequesterRsrc --keepParent "$BUILD_DIR/chrome_apps" "$CHROME_ZIP"
 ditto -c -k --sequesterRsrc --keepParent "$BUILD_DIR/native_apps" "$NATIVE_ZIP"
 ditto -c -k --sequesterRsrc --keepParent "$BUILD_DIR/chromium_apps" "$CHROMIUM_ZIP"
+if [ -d "$BUILD_DIR/chromium_apps_x64" ]; then
+    ditto -c -k --sequesterRsrc --keepParent "$BUILD_DIR/chromium_apps_x64" "$CHROMIUM_X64_ZIP"
+fi
 echo "$CHROME_ZIP"
 echo "$NATIVE_ZIP"
 echo "$CHROMIUM_ZIP"
+echo "$CHROMIUM_X64_ZIP"
 
 echo ""
 echo "Release 包已生成 / Release packages ready"
