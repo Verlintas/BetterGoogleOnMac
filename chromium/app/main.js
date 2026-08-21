@@ -1,4 +1,6 @@
-const { app, BrowserWindow, Menu, shell } = require('electron');
+const { app, BrowserWindow, Menu, shell, session, Notification } = require('electron');
+const fs = require('fs');
+const path = require('path');
 
 const SERVICE_NAME = '{{APP_NAME}}';
 const SERVICE_URL = '{{APP_URL}}';
@@ -12,10 +14,38 @@ const navHistory = (wc) => wc.navigationHistory || {
   goForward: () => wc.goForward(),
 };
 
-function createWindow() {
+function boundsFile() {
+  return path.join(app.getPath('userData'), 'window-bounds.json');
+}
+
+function loadBounds() {
+  try {
+    const b = JSON.parse(fs.readFileSync(boundsFile(), 'utf8'));
+    const displays = require('electron').screen.getAllDisplays();
+    const visible = displays.some((d) => {
+      const a = d.workArea;
+      return b.x < a.x + a.width && b.x + b.width > a.x && b.y < a.y + a.height && b.y + b.height > a.y;
+    });
+    return visible ? b : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveBounds() {
+  if (!win || win.isDestroyed()) return;
+  try {
+    fs.writeFileSync(boundsFile(), JSON.stringify(win.getNormalBounds()));
+  } catch {}
+}
+
+function createWindow(url) {
+  const saved = loadBounds();
   win = new BrowserWindow({
-    width: 1280,
-    height: 820,
+    width: saved ? saved.width : 1280,
+    height: saved ? saved.height : 820,
+    x: saved ? saved.x : undefined,
+    y: saved ? saved.y : undefined,
     minWidth: 480,
     minHeight: 320,
     title: SERVICE_NAME,
@@ -39,10 +69,10 @@ function createWindow() {
     return { action: 'deny' };
   });
 
-  wc.on('will-navigate', (event, url) => {
-    if (!/^https?:/i.test(url)) {
+  wc.on('will-navigate', (event, target) => {
+    if (!/^https?:/i.test(target)) {
       event.preventDefault();
-      shell.openExternal(url);
+      shell.openExternal(target);
     }
   });
 
@@ -51,7 +81,37 @@ function createWindow() {
     win.setTitle(title && title.trim() ? title : SERVICE_NAME);
   });
 
-  win.loadURL(SERVICE_URL);
+  win.on('resize', saveBounds);
+  win.on('move', saveBounds);
+  win.on('close', saveBounds);
+
+  win.loadURL(url || SERVICE_URL);
+}
+
+function setupPermissions() {
+  const s = session.defaultSession;
+  const allowed = new Set(['media', 'notifications', 'clipboard-read', 'clipboard-sanitized-write', 'display-capture', 'pointerLock', 'fullscreen']);
+  s.setPermissionRequestHandler((wc, permission, callback) => {
+    callback(allowed.has(permission));
+  });
+  s.setPermissionCheckHandler((wc, permission) => {
+    return allowed.has(permission);
+  });
+}
+
+function setupDownloads() {
+  session.defaultSession.on('will-download', (event, item) => {
+    item.on('done', (e, state) => {
+      if (state === 'completed') {
+        if (Notification.isSupported()) {
+          new Notification({
+            title: SERVICE_NAME,
+            body: `下载完成 / Download finished: ${item.getFilename()}`,
+          }).show();
+        }
+      }
+    });
+  });
 }
 
 function buildMenu() {
@@ -84,6 +144,8 @@ function buildMenu() {
         { type: 'separator' },
         { label: 'Reload', accelerator: 'Cmd+R', click: () => win.webContents.reload() },
         { label: 'Home', accelerator: 'Cmd+Shift+H', click: () => win.loadURL(SERVICE_URL) },
+        { type: 'separator' },
+        { label: 'New Window', accelerator: 'Cmd+N', click: () => createWindow() },
       ],
     },
     {
@@ -101,16 +163,29 @@ const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {
   app.quit();
 } else {
-  app.on('second-instance', () => {
+  app.on('second-instance', (event, argv) => {
+    const url = argv.find((a) => /^bettergoogle-/i.test(a));
     if (win) {
       if (win.isMinimized()) win.restore();
       win.focus();
+      if (url) win.loadURL(url.replace(/^bettergoogle-[a-z0-9]+:\/\//i, 'https://'));
+    }
+  });
+  app.on('open-url', (event, url) => {
+    event.preventDefault();
+    if (win) {
+      if (win.isMinimized()) win.restore();
+      win.focus();
+      win.loadURL(url.replace(/^bettergoogle-[a-z0-9]+:\/\//i, 'https://'));
     }
   });
   app.whenReady().then(() => {
     app.setName(SERVICE_NAME);
+    setupPermissions();
+    setupDownloads();
     buildMenu();
-    createWindow();
+    const deepUrl = process.argv.find((a) => /^bettergoogle-/i.test(a));
+    createWindow(deepUrl ? deepUrl.replace(/^bettergoogle-[a-z0-9]+:\/\//i, 'https://') : null);
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });

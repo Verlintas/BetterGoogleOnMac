@@ -1,0 +1,42 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build all editions
+        run: |
+          bash scripts/make_icons.sh
+          bash scripts/create_chrome_apps.sh
+          bash scripts/build_native_apps.sh
+          bash scripts/build_chromium_apps.sh all
+
+      - name: Package release zips
+        run: bash scripts/package_release.sh
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          NOTES="$(sed "s/{{VERSION}}/${TAG}/g" RELEASE_NOTES.md)"
+          gh release create "$TAG" \
+            --title "BetterGoogleOnMac ${TAG}" \
+            --notes "$NOTES" \
+            build/zip/apps/*.zip build/zip/BetterGoogleOnMac-*.zip

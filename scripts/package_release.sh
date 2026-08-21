@@ -16,7 +16,9 @@ rm -f "$ZIP_DIR"/*.zip "$APPS_DIR"/*.zip
 for entry in "${SERVICES[@]}"; do
     IFS='|' read -r name url domain slug _ _ <<< "$entry"
     slug_name="$(echo "$name" | tr ' ' '-')"
-    for variant in "Chromium|chromium_apps|" "Chrome|chrome_apps| (Chrome)" "Safari|native_apps| (Safari)"; do
+    variants=("Chromium|chromium_apps|" "Chrome|chrome_apps| (Chrome)" "Safari|native_apps| (Safari)")
+    [ -d "$BUILD_DIR/chromium_apps_x64" ] && variants+=("Chromium-x64|chromium_apps_x64|")
+    for variant in "${variants[@]}"; do
         label="${variant%%|*}"
         rest="${variant#*|}"
         folder="${rest%%|*}"
