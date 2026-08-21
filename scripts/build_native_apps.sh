@@ -24,7 +24,7 @@ TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
 for entry in "${SERVICES[@]}"; do
-    IFS='|' read -r name url domain slug _ _ <<< "$entry"
+    IFS='|' read -r name url domain slug _ _ _ <<< "$entry"
     app_dir="$OUT_DIR/$name.app"
     bundle_id="com.bettergoogle.native.$slug"
     binary="$name"

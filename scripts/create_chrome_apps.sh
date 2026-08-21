@@ -15,7 +15,7 @@ rm -rf "$OUT_DIR"
 mkdir -p "$OUT_DIR"
 
 for entry in "${SERVICES[@]}"; do
-    IFS='|' read -r name url domain slug _ _ <<< "$entry"
+    IFS='|' read -r name url domain slug _ _ _ <<< "$entry"
     app_name="$name (Chrome)"
     app_dir="$OUT_DIR/$app_name.app"
     bundle_id="com.bettergoogle.chrome.$slug"

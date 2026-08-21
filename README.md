@@ -101,8 +101,8 @@ Just drag the `.app` files to Trash; nothing else is installed.
   Chrome version: `Google Chrome --app=<URL>` standalone window mode.
 - 原生版：AppKit + WKWebView，`swiftc` 编译，`lipo` 合成 arm64 + x86_64 通用二进制。
   Native version: AppKit + WKWebView, compiled with `swiftc`, `lipo`-merged into a universal arm64 + x86_64 binary.
-- 图标：优先下载 Google 官方 favicon，失败时自动生成本地品牌色图标。
-  Icons: Google's official favicon is preferred; a local branded icon is generated automatically when unavailable.
+- 图标：优先使用 Google 官方产品图标（gstatic CDN），其次 Google favicon，最后自动生成本地品牌色图标。
+  Icons: Google's official product icons (gstatic CDN) are preferred, then Google favicon, and finally a locally generated branded icon.
 
 ## 许可证 / License
 
