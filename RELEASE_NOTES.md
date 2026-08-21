@@ -26,4 +26,4 @@
 
 ## 源码 / Source
 
-[github.com/Verlintas/BetterGoogleOnMac](https://github.com/Verlintas/BetterGoogleOnMac)
+[github.com/Verlintas/GoogleOnYourMac](https://github.com/Verlintas/GoogleOnYourMac)
