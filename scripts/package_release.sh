@@ -11,6 +11,7 @@ BUILD_DIR="$ROOT_DIR/build"
 ZIP_DIR="$BUILD_DIR/zip"
 APPS_DIR="$ZIP_DIR/apps"
 mkdir -p "$APPS_DIR"
+rm -f "$ZIP_DIR"/*.zip "$APPS_DIR"/*.zip
 
 for entry in "${SERVICES[@]}"; do
     IFS='|' read -r name url domain slug _ _ <<< "$entry"
