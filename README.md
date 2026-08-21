@@ -12,34 +12,38 @@ This project generates a standalone macOS app for each Google service — one cl
 
 ## ⬇️ 下载 / Download
 
+### 一键全部安装 / All-in-one (recommended)
+
 | 版本 / Version | 说明 / Description | 下载 / Download |
 |---|---|---|
-| **Chrome 版 / Chrome Apps** | 以 Chrome 独立窗口运行（无地址栏），自动使用 Chrome 登录态；任何 Mac 可用，需已安装 Google Chrome / Runs as Chrome standalone windows (no address bar), reuses your Chrome login; works on any Mac, requires Google Chrome | [BetterGoogleOnMac-Chrome-v1.0.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/BetterGoogleOnMac-Chrome-v1.0.0.zip) |
-| **原生版 / Native Apps** | 真正的原生应用（Swift + WKWebView，Safari 内核），不依赖 Chrome；通用二进制，Apple Silicon 与 Intel 均支持 / True native apps (Swift + WKWebView, Safari engine), no Chrome needed; universal binary for Apple Silicon and Intel | [BetterGoogleOnMac-Native-v1.0.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/BetterGoogleOnMac-Native-v1.0.0.zip) |
+| **Chrome 版合集 / Chrome Apps** | 全部 10 个应用，Chrome 独立窗口（无地址栏），复用 Chrome 登录态；需已安装 Google Chrome / All 10 apps as Chrome standalone windows (no address bar), reuses your Chrome login; requires Google Chrome | [BetterGoogleOnMac-Chrome-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/BetterGoogleOnMac-Chrome-v1.1.0.zip) |
+| **原生版合集 / Native Apps** | 全部 10 个应用，真正的原生应用（Swift + WKWebView，Safari 内核），不依赖 Chrome；通用二进制，Apple Silicon 与 Intel 均支持 / All 10 apps as true native apps (Swift + WKWebView, Safari engine), no Chrome needed; universal binary for Apple Silicon and Intel | [BetterGoogleOnMac-Native-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/BetterGoogleOnMac-Native-v1.1.0.zip) |
+
+### 单个服务下载 / Individual apps
+
+每个服务单独打包，各一个 zip / Each service is packaged separately, one zip per app:
+
+| 服务 / App | 简介 / Description | Chrome 版 / Chrome | 原生版 / Native |
+|---|---|---|---|
+| Gmail | 邮件收发 / Email client | [Gmail-Chrome-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Gmail-Chrome-v1.1.0.zip) | [Gmail-Native-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Gmail-Native-v1.1.0.zip) |
+| Google Calendar | 日程管理 / Calendar & scheduling | [Google-Calendar-Chrome-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Calendar-Chrome-v1.1.0.zip) | [Google-Calendar-Native-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Calendar-Native-v1.1.0.zip) |
+| Google Drive | 文件云存储 / Cloud storage | [Google-Drive-Chrome-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Drive-Chrome-v1.1.0.zip) | [Google-Drive-Native-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Drive-Native-v1.1.0.zip) |
+| Google Docs | 在线文档 / Word processing | [Google-Docs-Chrome-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Docs-Chrome-v1.1.0.zip) | [Google-Docs-Native-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Docs-Native-v1.1.0.zip) |
+| Google Sheets | 在线表格 / Spreadsheets | [Google-Sheets-Chrome-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Sheets-Chrome-v1.1.0.zip) | [Google-Sheets-Native-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Sheets-Native-v1.1.0.zip) |
+| Google Slides | 在线演示 / Presentations | [Google-Slides-Chrome-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Slides-Chrome-v1.1.0.zip) | [Google-Slides-Native-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Slides-Native-v1.1.0.zip) |
+| Google Meet | 视频会议 / Video meetings | [Google-Meet-Chrome-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Meet-Chrome-v1.1.0.zip) | [Google-Meet-Native-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Meet-Native-v1.1.0.zip) |
+| Google Photos | 照片管理 / Photo storage | [Google-Photos-Chrome-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Photos-Chrome-v1.1.0.zip) | [Google-Photos-Native-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Photos-Native-v1.1.0.zip) |
+| YouTube | 视频平台 / Video sharing | [YouTube-Chrome-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/YouTube-Chrome-v1.1.0.zip) | [YouTube-Native-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/YouTube-Native-v1.1.0.zip) |
+| Google Maps | 地图导航 / Maps & navigation | [Google-Maps-Chrome-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Maps-Chrome-v1.1.0.zip) | [Google-Maps-Native-v1.1.0.zip](https://github.com/Verlintas/BetterGoogleOnMac/releases/latest/download/Google-Maps-Native-v1.1.0.zip) |
 
 其他版本 / Other versions: [Releases 页面 / Releases page](https://github.com/Verlintas/BetterGoogleOnMac/releases)
 
 ---
 
-## 包含的服务 / Included services
-
-| 应用 / App | URL | Chrome 版 / Chrome | 原生版 / Native |
-|---|---|---|---|
-| Gmail | mail.google.com | `Gmail (Chrome).app` | `Gmail.app` |
-| Google 日历 / Calendar | calendar.google.com | `Google Calendar (Chrome).app` | `Google Calendar.app` |
-| Google 云端硬盘 / Drive | drive.google.com | `Google Drive (Chrome).app` | `Google Drive.app` |
-| Google 文档 / Docs | docs.google.com/document | `Google Docs (Chrome).app` | `Google Docs.app` |
-| Google 表格 / Sheets | docs.google.com/spreadsheets | `Google Sheets (Chrome).app` | `Google Sheets.app` |
-| Google 幻灯片 / Slides | docs.google.com/presentation | `Google Slides (Chrome).app` | `Google Slides.app` |
-| Google Meet | meet.google.com | `Google Meet (Chrome).app` | `Google Meet.app` |
-| Google 相册 / Photos | photos.google.com | `Google Photos (Chrome).app` | `Google Photos.app` |
-| YouTube | youtube.com | `YouTube (Chrome).app` | `YouTube.app` |
-| Google 地图 / Maps | maps.google.com | `Google Maps (Chrome).app` | `Google Maps.app` |
-
 ## 安装 / Installation
 
-1. 下载上面的 zip 并解压。
-   Download one of the zips above and unzip it.
+1. 下载对应的 zip（合集或单个服务均可）并解压。
+   Download the zip you need (all-in-one or a single service) and unzip it.
 2. 把 `.app` 拖入「应用程序」文件夹（推荐），或直接双击使用。
    Drag the `.app` files into your Applications folder (recommended), or just double-click to use them.
 3. 首次打开若提示「无法验证开发者」，右键点击应用 →「打开」即可（未签名应用的正常提示，源码完全开源可审计）。

@@ -15,4 +15,4 @@ SERVICES=(
   "Google Maps|https://maps.google.com|maps.google.com|maps|🗺️|#1A73E8"
 )
 
-VERSION="1.0.0"
+VERSION="1.1.0"
