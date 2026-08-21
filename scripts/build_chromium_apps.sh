@@ -26,15 +26,23 @@ build_arch() {
     local zip_name="$EL_DIR/electron.zip.$arch"
     local template="$EL_DIR/template.$arch.app"
 
-    # ---- 1. 下载 Electron（未缓存时，npmmirror 失败则回退官方源）----
+    # ---- 1. 下载 Electron（未缓存时，按环境选择更快源）----
     if [ ! -f "$zip_name" ]; then
-        echo "下载 Electron v$EL_VERSION ($arch) [npmmirror]..."
         mkdir -p "$EL_DIR"
-        if ! curl -fsSL --max-time 600 -o "$zip_name" \
-            "https://npmmirror.com/mirrors/electron/$EL_VERSION/electron-v$EL_VERSION-darwin-$arch.zip"; then
-            echo "npmmirror 失败，回退 github.com..."
-            curl -fsSL --max-time 1200 -o "$zip_name" \
-                "https://github.com/electron/electron/releases/download/v$EL_VERSION/electron-v$EL_VERSION-darwin-$arch.zip"
+        MIRROR="https://npmmirror.com/mirrors/electron/$EL_VERSION/electron-v$EL_VERSION-darwin-$arch.zip"
+        OFFICIAL="https://github.com/electron/electron/releases/download/v$EL_VERSION/electron-v$EL_VERSION-darwin-$arch.zip"
+        if [ -n "${GITHUB_ACTIONS:-}" ]; then
+            echo "下载 Electron v$EL_VERSION ($arch) [github.com]..."
+            if ! curl -fsSL --max-time 600 -o "$zip_name" "$OFFICIAL"; then
+                echo "github.com 失败，回退 npmmirror..."
+                curl -fsSL --max-time 600 -o "$zip_name" "$MIRROR"
+            fi
+        else
+            echo "下载 Electron v$EL_VERSION ($arch) [npmmirror]..."
+            if ! curl -fsSL --max-time 600 -o "$zip_name" "$MIRROR"; then
+                echo "npmmirror 失败，回退 github.com..."
+                curl -fsSL --max-time 1200 -o "$zip_name" "$OFFICIAL"
+            fi
         fi
     fi
 
