@@ -86,6 +86,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, 
         webView.navigationDelegate = self
         webView.uiDelegate = self
         webView.allowsBackForwardNavigationGestures = true
+        // WKWebView 默认 UA 缺少 Version/Safari 标记，会被 Google 判定为不受支持的浏览器；
+        // 这里伪装成现代 Safari，让 Gmail 等 Google 服务正常识别。
+        // The default WKWebView UA lacks Version/Safari tokens, which Google rejects as unsupported;
+        // mimic a modern Safari so Google services (Gmail, etc.) recognize it.
+        webView.customUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15"
+        webView.autoresizingMask = [.width, .height]
+        webView.allowsMagnification = true
         window.contentView = webView
 
         titleObservation = webView.observe(\.title, options: [.new]) { [weak self] _, change in

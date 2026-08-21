@@ -1,0 +1,6 @@
+{
+  "name": "{{BUNDLE_ID}}",
+  "version": "2.0.0",
+  "main": "main.js",
+  "private": true
+}

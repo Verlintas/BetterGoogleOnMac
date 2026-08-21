@@ -16,7 +16,7 @@ rm -f "$ZIP_DIR"/*.zip "$APPS_DIR"/*.zip
 for entry in "${SERVICES[@]}"; do
     IFS='|' read -r name url domain slug _ _ <<< "$entry"
     slug_name="$(echo "$name" | tr ' ' '-')"
-    for variant in "Chrome|chrome_apps| (Chrome)" "Native|native_apps|"; do
+    for variant in "Chromium|chromium_apps|" "Chrome|chrome_apps| (Chrome)" "Safari|native_apps| (Safari)"; do
         label="${variant%%|*}"
         rest="${variant#*|}"
         folder="${rest%%|*}"
@@ -33,11 +33,14 @@ for entry in "${SERVICES[@]}"; do
 done
 
 CHROME_ZIP="$ZIP_DIR/BetterGoogleOnMac-Chrome-v$VERSION.zip"
-NATIVE_ZIP="$ZIP_DIR/BetterGoogleOnMac-Native-v$VERSION.zip"
+NATIVE_ZIP="$ZIP_DIR/BetterGoogleOnMac-Safari-v$VERSION.zip"
+CHROMIUM_ZIP="$ZIP_DIR/BetterGoogleOnMac-Chromium-v$VERSION.zip"
 ditto -c -k --sequesterRsrc --keepParent "$BUILD_DIR/chrome_apps" "$CHROME_ZIP"
 ditto -c -k --sequesterRsrc --keepParent "$BUILD_DIR/native_apps" "$NATIVE_ZIP"
+ditto -c -k --sequesterRsrc --keepParent "$BUILD_DIR/chromium_apps" "$CHROMIUM_ZIP"
 echo "$CHROME_ZIP"
 echo "$NATIVE_ZIP"
+echo "$CHROMIUM_ZIP"
 
 echo ""
 echo "Release 包已生成 / Release packages ready"

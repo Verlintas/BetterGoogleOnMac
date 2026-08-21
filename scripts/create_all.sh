@@ -11,11 +11,13 @@ DEST="${1:-$HOME/Applications/BetterGoogleOnMac}"
 bash "$SCRIPT_DIR/make_icons.sh"
 bash "$SCRIPT_DIR/create_chrome_apps.sh"
 bash "$SCRIPT_DIR/build_native_apps.sh"
+bash "$SCRIPT_DIR/build_chromium_apps.sh"
 
 rm -rf "$DEST"
 mkdir -p "$DEST"
 cp -R "$BUILD_DIR/chrome_apps/" "$DEST/"
 cp -R "$BUILD_DIR/native_apps/" "$DEST/"
+cp -R "$BUILD_DIR/chromium_apps/" "$DEST/"
 
 echo ""
 echo "全部完成！应用已安装到: $DEST"
