@@ -30,6 +30,22 @@ jobs:
       - name: Package release zips
         run: bash scripts/package_release.sh
 
+      - name: Verify artifacts
+        run: |
+          set -e
+          count=$(ls build/zip/apps/*.zip | wc -l | tr -d ' ')
+          echo "per-app zips: $count"
+          [ "$count" -ge 40 ]
+          for z in build/zip/apps/*.zip; do unzip -tq "$z" >/dev/null; done
+          [ -f build/zip/GoogleOnYourMac-Chromium-v${{ github.ref_name }}.zip ]
+          [ -f build/zip/GoogleOnYourMac-Chromium-x64-v${{ github.ref_name }}.zip ]
+          file build/chromium_apps/Gmail.app/Contents/MacOS/Electron | grep -q arm64
+          file build/chromium_apps_x64/Gmail.app/Contents/MacOS/Electron | grep -q x86_64
+          for a in build/native_apps/*.app build/chrome_apps/*.app; do
+            plutil -lint "$a/Contents/Info.plist" >/dev/null
+          done
+          echo "all artifacts verified"
+
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

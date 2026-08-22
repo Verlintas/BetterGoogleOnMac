@@ -15,4 +15,4 @@ SERVICES=(
   "Google Maps|https://maps.google.com|maps.google.com|maps|🗺️|#1A73E8|https://www.gstatic.com/images/branding/product/2x/maps_64dp.png"
 )
 
-VERSION="2.1.0"
+VERSION="2.1.1"

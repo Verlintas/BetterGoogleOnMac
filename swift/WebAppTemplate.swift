@@ -199,6 +199,44 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, 
         validateToolbar()
     }
 
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        validateToolbar()
+        let nsError = error as NSError
+        if nsError.code != NSURLErrorCancelled {
+            showErrorPage(error)
+        }
+    }
+
+    // 渲染进程（WebProcess）崩溃后自动重新加载
+    // Reload automatically after the WebProcess crashes
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        validateToolbar()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            webView.load(URLRequest(url: URL(string: homeURLString)!))
+        }
+    }
+
+    // 加载失败时显示可重试的错误页
+    // Show a retryable error page when loading fails
+    private func showErrorPage(_ error: Error) {
+        let nsError = error as NSError
+        let desc = nsError.localizedDescription.replacingOccurrences(of: "'", with: "\\'")
+        let html = """
+        <!DOCTYPE html><html><head><meta charset="utf-8">
+        <style>
+          body{font-family:-apple-system,sans-serif;background:#fafafa;color:#333;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
+          .box{text-align:center;max-width:480px;padding:32px}
+          h1{font-size:22px;margin:0 0 8px}
+          p{font-size:14px;color:#666;margin:0 0 24px;word-break:break-all}
+          button{font-size:14px;padding:8px 28px;border-radius:20px;border:none;background:#1a73e8;color:#fff;cursor:pointer}
+        </style></head><body><div class="box">
+          <h1>加载失败 / Failed to load</h1><p>\(desc) (\(nsError.code))</p>
+          <button onclick="location.href='\(homeURLString)'">重新加载 / Reload</button>
+        </div></body></html>
+        """
+        webView.loadHTMLString(html, baseURL: URL(string: homeURLString))
+    }
+
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if let url = navigationAction.request.url {
             let scheme = url.scheme?.lowercased() ?? ""

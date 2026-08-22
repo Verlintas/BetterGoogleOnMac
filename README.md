@@ -109,6 +109,11 @@ Yes. Log in once when first prompted; all services share the same login afterwar
 Chromium 版内置完整 Chromium 内核（Electron 剥离版，仅保留必需组件），Google 识别为 Chrome，流畅度与 Chrome 一致，但每个 App 约 103MB（Apple Silicon）；Chrome 版用你已装的 Chrome 开独立窗口，零体积但需安装 Chrome；Safari 版是 WKWebView（Safari 内核）原生应用，零体积但 Google 页面流畅度不如 Chromium。
 Chromium edition embeds a stripped Chromium engine (~103MB each, Apple Silicon), Google treats it as Chrome — smoothest; Chrome edition is zero-size but requires Chrome installed; Safari edition is a WKWebView native app (zero-size) that's less smooth on Google apps.
 
+**Q: 应用崩溃或断网了怎么办？**
+Chromium 版：页面崩溃后 1.5 秒自动恢复加载；断网/加载失败会显示可重试的错误页；启动 10 秒后自动检查新版本（有更新时通知），也可在菜单「检查更新」手动检查；诊断日志在 `~/Library/Application Support/com.bettergoogle.chromium.<服务>/log.txt`。
+Safari 版：WebProcess 崩溃后自动重新加载，加载失败显示可重试错误页。
+Chromium edition auto-recovers from page crashes (1.5s), shows a retryable error page on network failure, checks for updates automatically; logs at `~/Library/Application Support/com.bettergoogle.chromium.<service>/log.txt`. Safari edition also auto-reloads after crashes and shows an error page on failure.
+
 **Q: 可以修改某个应用的网址吗？**
 可以，修改 `services.sh` 后重新运行 `scripts/create_all.sh` 即可。
 Yes — edit `services.sh` and re-run `scripts/create_all.sh`.

@@ -1,6 +1,6 @@
 {
   "name": "{{BUNDLE_ID}}",
-  "version": "2.0.0",
+  "version": "{{VERSION}}",
   "main": "main.js",
   "private": true
 }

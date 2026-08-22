@@ -138,7 +138,7 @@ EOF
         mkdir -p "$src_dir"
         sed -e "s|{{APP_NAME}}|$name|g" -e "s|{{APP_URL}}|$url|g" -e "s|{{BUNDLE_ID}}|$bundle_id|g" \
             "$APP_TEMPLATE_DIR/main.js" > "$src_dir/main.js"
-        sed -e "s|{{BUNDLE_ID}}|$bundle_id|g" "$APP_TEMPLATE_DIR/package.json" > "$src_dir/package.json"
+        sed -e "s|{{BUNDLE_ID}}|$bundle_id|g" -e "s|{{VERSION}}|$VERSION|g" "$APP_TEMPLATE_DIR/package.json" > "$src_dir/package.json"
         node "$ASAR_PACK" "$src_dir" "$C/Resources/default_app.asar"
         rm -rf "$src_dir"
 
