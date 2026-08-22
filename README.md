@@ -17,7 +17,7 @@ This project generates a standalone macOS app for each Google service — one cl
 > **三个版本选一个就行：日常使用推荐 Chromium 版（最流畅）** / Pick one edition: **Chromium edition is recommended for daily use (smoothest)**
 > - **Chromium 版**：内置完整 Chromium 内核（剥离后的 Electron，仅保留必需组件），不依赖任何浏览器，Google 服务识别为 Chrome，体验与 Chrome 一致（推荐）/ self-contained stripped Chromium engine, no browser needed, Google sees it as Chrome
 > - **Chrome 版**：零体积，用你已安装的 Chrome 打开独立窗口，与 Chrome 共享登录 / zero-size, opens a standalone window via your installed Chrome, shares its login
-> - **Safari 版**：Swift + WKWebView（Safari 内核），零体积，Google 服务页面更省资源 / Safari engine, zero-size, lighter on resources
+> - **Safari 版**：Swift + WKWebView（Safari 内核），零体积；**最后支持版（含全部最终功能），不再继续维护 / final support release — feature-complete, no further development**
 
 ### 一键全部安装 / All-in-one
 
@@ -77,6 +77,11 @@ Chromium features: camera/mic (Meet calls), download notifications, window memor
   - 下载完成通知 / Download-finished notifications
   - 窗口位置与大小记忆 / Window position & size memory
   - 深链接：`bettergoogle-<service>://` 可被浏览器等外部调用 / Deep links: `bettergoogle-<service>://`
+  - 页面崩溃自动恢复、断网错误页、启动自动检查更新（菜单可手动检查）/ Crash auto-recovery, offline error page, auto update check
+- **Safari 版（最后支持）额外功能 / Safari extras (final)**:
+  - 检查更新（菜单 + 启动自动检查）/ Update check (menu + auto on launch)
+  - 窗口位置与大小记忆 / Window position & size memory
+  - 页面崩溃自动恢复、断网错误页 / Crash auto-recovery, offline error page
 - **Chrome 版**：独立窗口，无地址栏、无标签页；登录信息与 Chrome 浏览器共享。
   Chrome version: standalone window without address bar or tabs; shares login with your Chrome browser.
 

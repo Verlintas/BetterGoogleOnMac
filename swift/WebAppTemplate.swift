@@ -4,13 +4,14 @@ import WebKit
 let appName = "{{APP_NAME}}"
 let homeURLString = "{{APP_URL}}"
 
-final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDelegate, NSToolbarDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKNavigationDelegate, WKUIDelegate, NSToolbarDelegate {
 
     private var window: NSWindow!
     private var webView: WKWebView!
     private var titleObservation: NSKeyValueObservation?
     private var backItem: NSToolbarItem!
     private var forwardItem: NSToolbarItem!
+    private let windowFrameKey = "windowFrame"
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         buildMenu()
@@ -18,6 +19,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, 
         buildToolbar()
         webView.load(URLRequest(url: URL(string: homeURLString)!))
         NSApp.activate(ignoringOtherApps: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 8) { [weak self] in
+            self?.checkForUpdates(manual: false)
+        }
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -33,6 +37,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, 
         mainMenu.addItem(appMenuItem)
         let appMenu = NSMenu()
         appMenu.addItem(withTitle: "About \(appName)", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
+        appMenu.addItem(withTitle: "检查更新 / Check for Updates…", action: #selector(checkForUpdatesMenu), keyEquivalent: "")
         appMenu.addItem(.separator())
         appMenu.addItem(withTitle: "Hide \(appName)", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
         appMenu.addItem(.separator())
@@ -73,12 +78,84 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, 
 
     // MARK: - Window
 
+    // MARK: - Window
+
+    func windowWillClose(_ notification: Notification) {
+        if let w = window {
+            UserDefaults.standard.set(NSStringFromRect(w.frame), forKey: windowFrameKey)
+        }
+    }
+
+    // MARK: - Update check
+
+    private let updateURL = URL(string: "https://api.github.com/repos/Verlintas/GoogleOnYourMac/releases/latest")!
+
+    @objc private func checkForUpdatesMenu() {
+        checkForUpdates(manual: true)
+    }
+
+    private func checkForUpdates(manual: Bool) {
+        var request = URLRequest(url: updateURL)
+        request.setValue("GoogleOnYourMac", forHTTPHeaderField: "User-Agent")
+        URLSession.shared.dataTask(with: request) { [weak self] data, _, _ in
+            guard let data = data,
+                  let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let tag = obj["tag_name"] as? String else { return }
+            let latest = Self.versionNumbers(tag)
+            let current = Self.versionNumbers("v" + (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0"))
+            let newer = Self.isNewer(latest, than: current)
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                if newer {
+                    let alert = NSAlert()
+                    alert.messageText = "发现新版本 \(tag) / New version \(tag) available"
+                    alert.informativeText = "是否前往 GitHub 下载？/ Open GitHub to download?"
+                    alert.addButton(withTitle: "前往下载 / Download")
+                    alert.addButton(withTitle: "取消 / Cancel")
+                    if alert.runModal() == .alertFirstButtonReturn {
+                        NSWorkspace.shared.open(URL(string: "https://github.com/Verlintas/GoogleOnYourMac/releases")!)
+                    }
+                } else if manual {
+                    let alert = NSAlert()
+                    alert.messageText = "已是最新版本 / You are up to date"
+                    alert.addButton(withTitle: "OK")
+                    alert.runModal()
+                }
+            }
+        }.resume()
+    }
+
+    private static func versionNumbers(_ v: String) -> [Int] {
+        v.replacingOccurrences(of: "v", with: "").split(separator: ".").compactMap { Int($0) }
+    }
+
+    private static func isNewer(_ a: [Int], than b: [Int]) -> Bool {
+        for i in 0..<max(a.count, b.count) {
+            let x = i < a.count ? a[i] : 0
+            let y = i < b.count ? b[i] : 0
+            if x != y { return x > y }
+        }
+        return false
+    }
+
     private func buildWindow() {
         let rect = NSRect(x: 0, y: 0, width: 1280, height: 820)
         window = NSWindow(contentRect: rect, styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false)
         window.title = appName
         window.minSize = NSSize(width: 480, height: 320)
-        window.center()
+        // 恢复上次的窗口位置与大小；若已移出屏幕则居中
+        // Restore the last window frame; center if it is off-screen
+        if let saved = UserDefaults.standard.string(forKey: windowFrameKey) {
+            let savedRect = NSRectFromString(saved)
+            if NSScreen.screens.contains(where: { $0.visibleFrame.intersects(savedRect) }) {
+                window.setFrame(savedRect, display: true)
+            } else {
+                window.center()
+            }
+        } else {
+            window.center()
+        }
+        window.delegate = self
 
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = .default()
